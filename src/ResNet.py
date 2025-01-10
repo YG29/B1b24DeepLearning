@@ -2,7 +2,6 @@
 
 # imports
 import numpy as np
-# import matplotlib.pyplot as plt
 
 import torch
 import torch.nn as nn
@@ -11,9 +10,7 @@ import torch.optim as optim
 
 import torchvision
 from torchvision.models import resnet18
-import torchvision.datasets as datasets
 import torchvision.transforms as transforms
-import torchvision.models as models
 
 
 ########## Load Data
