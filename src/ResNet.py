@@ -29,8 +29,8 @@ validation_set = torchvision.datasets.FashionMNIST('./data', train=False, transf
 
 # Create data loaders for our datasets; shuffle for training, not for validation
 # improves data retrieval
-training_loader = torch.utils.data.DataLoader(training_set, batch_size=4, shuffle=True)
-validation_loader = torch.utils.data.DataLoader(validation_set, batch_size=4, shuffle=False)
+training_loader = torch.utils.data.DataLoader(training_set, batch_size=16, shuffle=True)
+validation_loader = torch.utils.data.DataLoader(validation_set, batch_size=16, shuffle=False)
 
 # Class labels
 classes = ('T-shirt', 'Trouser', 'Pullover', 'Dress', 'Coat',
@@ -47,7 +47,7 @@ in_features = model.fc.in_features
 model.fc = nn.Linear(in_features, 10)
 
 # Set the model to training mode and use GPU if available
-device = torch.device("cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
 # Define loss function and optimizer
@@ -60,7 +60,7 @@ scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
 
 ############# finetuning the model
 
-num_epochs = 3
+num_epochs = 5
 
 for epoch in range(num_epochs):
     running_loss = 0.0
@@ -84,5 +84,5 @@ for epoch in range(num_epochs):
 print('Fine-tuning complete!')
 
 # Save the fine-tuned model
-torch.save(model.state_dict(), 'finetuned_resnet18_mnist.pth')
+torch.save(model.state_dict(), 'finetuned_resnet18_fmnist.pth')
 print('Model saved!')

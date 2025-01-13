@@ -40,10 +40,13 @@ classes = ('T-shirt', 'Trouser', 'Pullover', 'Dress', 'Coat',
 ######### Load Model
 
 
-learnt_model = 'finetuned_resnet18_mnist.pth'
+learnt_model = 'finetuned_resnet18_fmnist.pth'
 
 learnt_net = resnet18()
 learnt_net.load_state_dict(torch.load(learnt_model))
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+learnt_net = learnt_net.to(device)
 
 
 ########### Evaluate Model
@@ -56,6 +59,7 @@ total = 0
 
 with torch.no_grad():
     for images, labels in validation_loader:
+        images, labels = images.to(device), labels.to(device)
         outputs = learnt_net(images)
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
@@ -80,6 +84,7 @@ theta_ast = Params2Vec(learnt_net.parameters())
 
 infer_net = resnet18()
 theta = Params2Vec(infer_net.parameters())
+infer_net = infer_net.to(device)
 
 loss_fn = nn.CrossEntropyLoss()
 
