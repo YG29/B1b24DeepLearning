@@ -3,7 +3,7 @@
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:1
 #SBATCH --job-name=resnet_finetuning
-#SBATCH --mem=2G
+#SBATCH --mem=4G
 
 module purge
 module load PyTorch-bundle/2.1.2-foss-2023a-CUDA-12.1.1

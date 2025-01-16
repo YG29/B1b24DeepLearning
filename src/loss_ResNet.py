@@ -108,22 +108,19 @@ for a, _ in enumerate(x):
 # Plot Loss
 fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
 
-# Make data.
-X, Y = np.meshgrid(x, y)
-R = np.sqrt(X**2 + Y**2)
-Z = np.sin(R)
-
 # Plot the surface.
-surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm,
+surf = ax.plot_surface(alpha, beta, losses, cmap=cm.coolwarm,
                        linewidth=0, antialiased=False)
 
 # Customize the z axis.
-# ax.set_zlim(-1.01, 1.01)
-# ax.zaxis.set_major_locator(LinearLocator(10))
-# A StrMethodFormatter is used automatically
 ax.zaxis.set_major_formatter('{x:.02f}')
+ax.set_zticks([])
 
-# Add a color bar which maps values to colors.
-fig.colorbar(surf, shrink=0.5, aspect=5)
+ax.set_title('Loss Landscape')
+ax.set_xlabel('$Alpha$', rotation=150)
+ax.set_ylabel('$Beta$')
+ax.set_zlabel('$Loss$', rotation=60)
+# ax.yaxis._axinfo['label']['space_factor'] = 3.0
 
-plt.savefig("./resnet_loss", format='pdf')
+
+plt.savefig("./resnet_loss.pdf", format='pdf')
