@@ -23,8 +23,8 @@ transform = transforms.Compose([
     transforms.Normalize((0.5,), (0.5,))
 ])
 
-# Create datasets for training
-mislabel_rate = 0.25
+# Create datasets for training and validation
+mislabel_rate = 0.9
 training_set = torchvision.datasets.FashionMNIST('./data', train=True, transform=transform, download=True)
 subset, _ = torch.utils.data.random_split(training_set, [ mislabel_rate, 1-mislabel_rate])
 
@@ -33,9 +33,12 @@ for idx, target in enumerate(training_set.targets[subset.indices]):
     labels.remove(target.item())
     training_set.targets[subset.indices[idx]] = np.random.choice(labels)
 
-# Create data loaders for our datasets; shuffle for training
+validation_set = torchvision.datasets.FashionMNIST('./data', train=False, transform=transform, download=True)
+
+# Create data loaders for our datasets; shuffle for training, not for validation
 # improves data retrieval
 training_loader = torch.utils.data.DataLoader(training_set, batch_size=16, shuffle=True)
+validation_loader = torch.utils.data.DataLoader(validation_set, batch_size=4, shuffle=False)
 
 # Class labels
 classes = ('T-shirt', 'Trouser', 'Pullover', 'Dress', 'Coat',
@@ -89,7 +92,7 @@ for epoch in range(num_epochs):
 print('Fine-tuning complete!')
 
 # Save the fine-tuned model
-torch.save(model.state_dict(), 'finetuned_mislabeled25_resnet18_fmnist.pth')
+torch.save(model.state_dict(), 'finetuned_mislabeled90_resnet18_fmnist.pth')
 print('Model saved!')
 
 ########### Evaluate Model
