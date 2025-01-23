@@ -86,3 +86,4 @@ print('Fine-tuning complete!')
 # Save the fine-tuned model
 torch.save(model.state_dict(), 'finetuned_resnet18_fmnist.pth')
 print('Model saved!')
+
