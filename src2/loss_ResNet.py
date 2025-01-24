@@ -43,7 +43,7 @@ classes = ('T-shirt', 'Trouser', 'Pullover', 'Dress', 'Coat',
 ######### Load Model
 
 
-learnt_model = 'models/finetuned_mislabeled90_resnet18_fmnist.pth'
+learnt_model = 'models/finetuned_resnet18_fmnist.pth'
 
 learnt_net = resnet18()
 in_features = learnt_net.fc.in_features
@@ -82,10 +82,10 @@ ax.zaxis.set_major_formatter('{x:.02f}')
 ax.set_zticks([])
 
 plt.suptitle("Loss Landscape", y=1, fontsize=18)
-plt.title("Mislabel rate = 90% \n Model accuracy = 0.1100", fontsize=10)
+plt.title("Mislabel rate = 0% \n Model accuracy = 0.9333", fontsize=10)
 ax.set_xlabel('$Alpha$', rotation=150)
 ax.set_ylabel('$Beta$')
 ax.set_zlabel('$Loss$', rotation=60)
 
 
-plt.savefig("./images/resnet90_loss.pdf", format='pdf')
+plt.savefig("./images/resnet00_loss.pdf", format='pdf')
