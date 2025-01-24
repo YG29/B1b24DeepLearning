@@ -94,6 +94,7 @@ model.eval()
 
 correct = 0
 total = 0
+loss = 0
 
 with torch.no_grad():
     for images, labels in validation_loader:
@@ -102,5 +103,7 @@ with torch.no_grad():
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
+        loss += criterion(predicted, labels).item() * labels.size(0)
 
+print(f'Loss of the fine-tuned model on the test images: {loss / len(validation_loader.dataset):.4f}')
 print(f'Accuracy of the fine-tuned model on the test images: {100 * correct / total:.2f}%')
