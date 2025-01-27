@@ -1,4 +1,5 @@
 # ResNet finetuning on mislabeled FMNIST
+# adapted from: https://pytorch.org/tutorials/beginner/introyt/trainingyt.html?highlight=nn%20crossentropyloss
 
 # imports
 import numpy as np
@@ -70,11 +71,15 @@ scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
 
 num_epochs = 5
 
+# Training loop
 for epoch in range(num_epochs):
     running_loss = 0.0
+
+    # Iterate over training data in batches
     for images, labels in training_loader:
         images, labels = images.to(device), labels.to(device)
 
+        # Optimization step
         optimizer.zero_grad()
         outputs = model(images)
         loss = criterion(outputs, labels)
@@ -104,11 +109,17 @@ correct = 0
 total = 0
 loss = 0
 
+# Testing loop
 with torch.no_grad():
+
+    # Iterate over test data in batches
     for images, labels in validation_loader:
         images, labels = images.to(device), labels.to(device)
+
         outputs = model(images)
         _, predicted = torch.max(outputs.data, 1)
+
+        # Save relevant metrics
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
         loss += criterion(predicted, labels).item() * labels.size(0)

@@ -42,8 +42,7 @@ classes = ('T-shirt', 'Trouser', 'Pullover', 'Dress', 'Coat',
 
 ######### Load Model
 
-
-learnt_model = 'models/finetuned_resnet18_fmnist.pth'
+learnt_model = 'models/finetuned_mislabeled90_resnet18_fmnist.pth'
 
 learnt_net = resnet18()
 in_features = learnt_net.fc.in_features
@@ -55,37 +54,36 @@ learnt_net = learnt_net.to(device)
 
 ############## Visualise Loss Landscape
 
-# data that the evaluator will use when evaluating loss
-
+# Parameters for loss visualization
 STEPS = 30
 distance = 2e6
 loss_fn = nn.CrossEntropyLoss()
 
+# Set loss visualization metric
 x, y = iter(validation_loader).__next__()
 metric = loss_landscapes.metrics.Loss(loss_fn, x, y)
 
 model_final = copy.deepcopy(learnt_net)
 
+# Evaluate loss landscape plane using above parameters
 loss_data_fin = loss_landscapes.random_plane(model_final, metric, distance, STEPS, normalization='filter', deepcopy_model=True)
 
-
-
+# Plot the above plane as 3D surface plot
 fig = plt.figure()
 ax = plt.axes(projection='3d')
 X = np.array([[j for j in range(STEPS)] for i in range(STEPS)])
 Y = np.array([[i for _ in range(STEPS)] for i in range(STEPS)])
 ax.plot_surface(X, Y, loss_data_fin, rstride=1, cstride=1, cmap='viridis', edgecolor='none')
-# ax.set_title('Surface Plot of Loss Landscape')
 
 # Customize the z axis.
 ax.zaxis.set_major_formatter('{x:.02f}')
 ax.set_zticks([])
 
 plt.suptitle("Loss Landscape", y=1, fontsize=18)
-plt.title("Mislabel rate = 0% \n Model accuracy = 0.9333", fontsize=10)
+plt.title("Mislabel rate = 90% \n Model accuracy = 0.1100", fontsize=10)
 ax.set_xlabel('$Alpha$', rotation=150)
 ax.set_ylabel('$Beta$')
 ax.set_zlabel('$Loss$', rotation=60)
 
 
-plt.savefig("./images/resnet00_loss.pdf", format='pdf')
+plt.savefig("./images/resnettest_loss.pdf", format='pdf')
