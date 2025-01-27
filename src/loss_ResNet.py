@@ -1,4 +1,5 @@
 # ResNet evaluation and loss visualisation
+# Adapted from: https://tvsujal.medium.com/visualising-the-loss-landscape-3a7bfa1c6fdf
 
 import numpy as np
 
@@ -72,6 +73,7 @@ print(f'Accuracy of the fine-tuned model on the test images: {100 * correct / to
 
 ############## Visualise Loss Landscape
 
+# Define transformation tau for 2D contour map
 def tau_2d(alpha, beta, theta_ast):
   a = alpha * theta_ast[:,None,None]
   b = beta * alpha * theta_ast[:,None,None]
@@ -82,8 +84,10 @@ from torch.nn.utils import (
   vector_to_parameters as Vec2Params
 )
 
+# Convert optimal parameters to vector
 theta_ast = Params2Vec(learnt_net.parameters())
 
+# Define a secondary network for inference and save its initial parameters to vector
 infer_net = resnet18()
 in_features = infer_net.fc.in_features
 infer_net.fc = nn.Linear(in_features, 10)
@@ -92,6 +96,7 @@ infer_net = infer_net.to(device)
 
 loss_fn = nn.CrossEntropyLoss()
 
+# Define grid over which to evaluate loss function along two random directions alpha and beta in parameter space
 x = torch.linspace(-2, 2, 10)
 y = torch.linspace(-2, 2, 10)
 alpha, beta = torch.meshgrid(x, y)
@@ -100,6 +105,7 @@ space = tau_2d(alpha, beta, theta_ast)
 
 losses = torch.empty_like(space[0, :, :])
 
+# Evaluate loss function over the given grid along alpha and beta
 for a, _ in enumerate(x):
   print(f'a = {a}')
   for b, _ in enumerate(y):
@@ -131,7 +137,7 @@ surf = ax.plot_surface(alpha.cpu(), beta.cpu(), losses.cpu(), cmap=cm.coolwarm,
                        linewidth=0, antialiased=False)
 
 # Customize the z axis.
-ax.set_zlim(2 * torch.min(losses).cpu(), 2 * torch.max(losses).cpu())
+# ax.set_zlim(2 * torch.min(losses).cpu(), 2 * torch.max(losses).cpu())
 ax.zaxis.set_major_formatter('{x:.02f}')
 ax.set_zticks([])
 
