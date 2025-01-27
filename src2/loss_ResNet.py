@@ -4,12 +4,9 @@ import numpy as np
 import copy
 
 import matplotlib.pyplot as plt
-from matplotlib import cm
-from matplotlib.ticker import LinearLocator
 
 import torch
 import torch.nn as nn
-import torch.optim as optim
 
 
 import torchvision
